@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Header Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Security Header Analyzer</h1>
+            <p>
+                Scan websites for important HTTP security headers and exposure risks.
+            </p>
+        </section>
+
+        <section class="card">
+            <form method="POST">
+                <input
+                    type="text"
+                    name="url"
+                    placeholder="Enter website URL (example.com)"
+                    required
+                >
+
+                <button type="submit">
+                    Analyze Site
+                </button>
+            </form>
+        </section>
+
+        {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        {% if report %}
+            <section class="card">
+
+                <div class="results-header">
+                    <div>
+                        <h2>Analysis Results</h2>
+                        <p>{{ report.final_url }}</p>
+                    </div>
+
+                    <div class="score-badge">
+                        Security Score: {{ report.score }}/{{ report.total }}
+                    </div>
+                </div>
+
+                <div class="result-grid">
+
+                    {% for item in report.results %}
+                        <div class="result {{ 'good' if item.present else 'bad' }}">
+
+                            <h3>
+                                {{ '✅' if item.present else '⚠️' }}
+                                {{ item.name }}
+                            </h3>
+
+                            <p>
+                                <strong>Value:</strong>
+                                {{ item.value }}
+                            </p>
+
+                            <p>
+                                {{ item.description }}
+                            </p>
+
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </section>
+        {% endif %}
+
+        <div class="footer">
+            Built with Flask + Azure App Service ☁️
+        </div>
+
+    </main>
+
+</body>
+</html>
